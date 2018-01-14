@@ -1,0 +1,175 @@
+Fill in the function definitions for each of the questions, and uncomment them. 
+The names of the functions correspond to the names given in the document cwk_15_16.pdf. 
+
+-- QUESTION 1 
+
+--Reflexive
+isReflexive :: Eq a => [(a, a)] -> Bool
+isReflexive l = and [elem (x,x) l | x<-xs ++ ys]
+    where 
+    xs = [x | (x,y) <- l]
+    ys = [ y | (x,y) <- l]
+    
+--Symmetry
+isSymmetric :: Eq a => [(a, a)] -> Bool
+isSymmetric l = and [elem (y,x)l |(x,y) <- l]
+
+--Transitive
+isTransitive :: (Eq a) => [(a,a)] -> Bool
+isTransitive xs = and [elem (x, z) xs | (x, y) <- xs , (y, z) <- xs ]
+
+--Equivalence 
+isEquivalence :: (Eq a) => [(a,a)] -> Bool    
+isEquivalence xs = isReflexive xs && isTransitive xs && isSymmetric xs
+
+
+
+--isEquivalence :: (Eq a) => [(a,a)] -> Bool
+{-
+eqClassOf :: (Eq a) => [(a,a)] -> a -> [a]
+ORDER OF ARGUMENTS IS RELATION THEN ELEMENT
+-}
+
+-- TEST SET FOR Q1
+{-
+Your functions should have the following behaviour:
+isReflexive [(1,2),(2,1),(1,1),(2,2)] is True
+isReflexive [(1,2),(2,1),(2,2)] is False
+isSymmetric [(1,2),(2,1),(1,1),(2,2)] is True
+isSymmetric [(1,2),(1,1),(2,2)] is False
+isTransitive [(1,2),(2,1),(1,1),(2,2)] is True
+isTransitive [(1,2),(2,3)] is False
+isEquivalence [(1,2),(2,1),(1,1),(2,2)] is True
+eqClassOf [(1,2),(2,1),(1,1),(2,2)] 1 is [1,2]
+-}
+
+-- QUESTION 2
+
+contained [] [] = True
+contained [] y = True
+contained (x:xs) y = elem x y && contained xs y
+
+multiEqual :: (Eq a) => [a] -> [a] -> Bool
+multiEqual [] [] = True
+multiEqual (_:_) [] = False
+multiEqual [] (_:_) = False
+multiEqual xs ys
+  | length xs == length ys && contained xs ys = True
+  | otherwise = False
+
+ ---Multiunion
+{-
+uniqueList :: (Eq a) => [a] -> [a]
+uniqueList [] = []
+uniqueList (x:xs)
+    | elem x xs = uniqueList xs
+    | otherwise = x : uniqueList xs 
+--Uniquelist each set // combine each set ******** 
+multiUnion  :: (Eq a) => [a] -> [a] -> [a]
+multiUnion [x:xs][y:ys]= [uniqueList (x,xs) && uniqueList(y,ys)  | x<-xs ++ y<-ys]-}
+    
+
+
+{-
+multiIntersection :: (Eq a) => [a] -> [a] -> [a]
+-}
+
+-- TEST SET FOR Q2
+{-
+Your functions should have the following behaviour:
+multiEqual [1,1,2] [1,2,1] is True
+multiEqual [1,1,2] [1,2] is False
+multiUnion [1,1,2] [1,2,2] is [1,1,2,2]
+multiIntersection [1,1,2] [1,2,2] is [1,2]
+-}
+
+-- QUESTION 3
+{-
+isSquare [] = []
+isSquare (x:xs) = length x : isSquare xs
+
+checkSquare [] n = true
+checkSquare (x:xs) n
+  | x == n = checkSquare xs n
+  | otherwise = false
+
+  
+-- | checkSquare (isSquare (x:xs) length(isSquare(x:xs))) == true 
+
+trace :: Eq a => [(a, a)] -> Bool
+trace (x:xs)
+    |checkSquare (isSquare (x:xs) length(isSquare(x:xs))) == true 
+    |trace
+-- trace [(1,2,3,4,5),(1,2,3,4,5),(1,2,3,4,5),(1,2,3,4,5),(1,2,3,4,5)]
+--Planning
+--Set each row to [x1,y1,z1], [x2,y2,z2], [x3,y3,z3]
+--Multiple each set with all with xs, each set with all ys and each set with all zs
+--Add the results
+-}
+
+{-
+isSquare [] = True
+isSquare (x:xs) = length x == (length xs + 1)
+
+checkSquare [] n = true
+checkSquare (x:xs) n
+  | x == n = checkSquare xs n
+  | otherwise = false
+
+elemAt :: Int -> [a] -> a
+elemAt _ [] = error "Makes no sense"
+elemAt 1 (x:xs) = x
+elemAt n (x:xs) = elemAt (n-1) xs
+
+trace :: Eq a => [(a, a)] -> Bool
+    |checkSquare (isSquare (x:xs) length(isSquare(x:xs))) == true 
+    |elemAt +1 ++
+-}
+matMult3 :: (Num a) => [[a]] -> [[a]] -> [[a]]
+matMult3 [[a11,a12,a13],[a21,a22,a23],[a31,a32,a33]] [[b11,b12,b13],[b21,b22,b23],[b31,b32,b33]] = [[a11*b11 + a12*b21 + a13*b31,a11*b12 + a12*b22 + a13*b32,a11*b13 + a12*b23 + a13*b33], [a21*b11 + a22*b21 + a23*b31,a21*b12 + a22*b22 + a23*b32,a21*b13 + a22*b23 + a23*b33],[a31*b11 + a32*b21 + a33*b31,a31*b12 + a32*b22 + a33*b32,a31*b13 + a32*b23 + a33*b33]]
+
+
+{-
+
+FIRST ARGUMENT IS A, SECOND IS B, YOU ARE TO WORK OUT AB 
+-}
+
+-- TEST SET FOR Q3
+{-
+Your functions should have the following behaviour:
+trace [[1,2],[6,4]] is Just 5
+
+--Planning
+--Set each row to [x1,y1,z1], [x2,y2,z2], [x3,y3,z3]
+--Multiple each set with all with xs, each set with all ys and each set with all zs
+--Add the results
+matMult3 [[1,0,1],[0,1,0],[0,0,1]] [[0,1,0],[1,0,1],[1,1,0]] is
+[[1,2,0],[1,0,1],[1,1,0]]
+-}
+
+-- QUESTION 4
+
+{-
+triNumber :: Int -> Int -> [Int]
+FIRST ARGUMENT IS ROW NUMBER, SECOND IS SEED VALUE AT TIP OF TRIANGLE
+-}
+
+-- TEST SET FOR Q4
+{-
+Your function should have the following behaviour:
+triNumber 3 1 is [2,3,5]
+-}
+
+-- QUESTION 5
+
+{-
+combine :: Int -> Int -> (Int, Int, Int)
+-}
+
+
+
+-- TEST SET FOR Q5
+{-
+Your function should have the following behaviour:
+combine 3 2 is (1,-1,1)
+-}
